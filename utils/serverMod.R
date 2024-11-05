@@ -15,7 +15,7 @@ formulaHerbServer <- function(id) {
     id,
     function(input, output, session) {
       count <- reactiveVal(0)
-      observeEvent(input$button, {
+      observeEvent(input$query, {
         count(count() + 1)
       })
       output$out <- renderText({
@@ -33,7 +33,7 @@ herbIngredientsServer <- function(id) { # 中药方剂
     function(input, output, session) {
       count <- reactiveVal(0)
       observeEvent(input$button, {
-        count(count() + 1)
+        count(count() + 2)
       })
       output$out <- renderText({
         count()

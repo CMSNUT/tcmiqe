@@ -141,20 +141,20 @@ uiBody <- dashboardBody(
 
     # 成分靶点 ----
     tabItem(
-      "ingredients_tagets",
-      ingredientsTagetsUI("ingredients_tagets","成分靶点")
+      "ingredients_targets",
+      ingredientsTagetsUI("ingredients_targets","成分靶点")
     ),
 
     # 疾病靶点 ----
     tabItem(
-      "disease_tagets",
-      diseaseTagetsUI("disease_tagets","疾病靶点")
+      "disease_targets",
+      diseaseTagetsUI("disease_targets","疾病靶点")
     ),
 
     # 靶点通路 ----
     tabItem(
-      "tagets_pathway",
-      tagetsPathwayUI("tagets_pathway","靶点通路")
+      "targets_pathway",
+      tagetsPathwayUI("targets_pathway","靶点通路")
     ),
 
     # 研究文献 ----
@@ -165,8 +165,8 @@ uiBody <- dashboardBody(
 
     # 靶点交集 ----
     tabItem(
-      "common_tagets",
-      commonTargetsUI("common_tagets","靶点交集")
+      "common_targets",
+      commonTargetsUI("common_targets","靶点交集")
     ),
 
     # 网络药理 ----
