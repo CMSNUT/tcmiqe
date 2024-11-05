@@ -1,0 +1,66 @@
+---
+title: "Note"
+output: 
+  github_document:
+    toc: TRUE
+---
+
+## 初始化
+- [X] 创建shinyweb工程
+- [X] 工作目录下，创建 `data` 和 `utils`文件夹
+- [X] `Utils`文件夹下，创建文件 `fct.R`、`serverMod.R`和`uiMod.R`
+
+
+### app.R
+
+```{r, eval=FALSE}
+library(shiny)
+library(shinydashboard)
+
+
+
+```
+
+
+```{r, eval=FALSE}
+
+```
+
+
+
+
+```{r, eval=FALSE}
+
+```
+
+
+
+```{r, eval=FALSE}
+
+```
+
+
+```{r, eval=FALSE}
+
+```
+
+
+
+```{r, eval=FALSE}
+
+```
+
+
+```{r, eval=FALSE}
+
+```
+
+
+```{r, eval=FALSE}
+
+```
+
+
+```{r, eval=FALSE}
+
+```
