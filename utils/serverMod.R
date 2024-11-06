@@ -14,14 +14,45 @@ formulaHerbServer <- function(id) {
   moduleServer(
     id,
     function(input, output, session) {
-      count <- reactiveVal(0)
+      # 中药库
+      tcmdb <- reactive({
+        # rs <- readxl::read_xlsx("data/中药数据库.xlsx") %>% lapply(as.factor) %>% as.data.frame
+        # rs$数据库 <- paste0('<a href="',rs$网址,'" target="_blank">', rs$数据库, '</a>') %>% as.data.frame
+        # colnames(rs[,1]) <- "数据库"
+        # rs <- rs[-ncol(rs)]
+        # rs
+        con <- dbConnect(SQLite(),"data/tcmnp.db")
+        rs <- dbReadTable(con,"tcmdb") %>% lapply(as.factor) %>% as.data.frame
+        dbDisconnect(con)
+        rs
+      })
+      output$tcm_db <- renderDT(tcmdb(), escape = FALSE)
+
+      # 查询方剂库
       observeEvent(input$query, {
-        count(count() + 1)
+        req(input$queryTxt)
+        con <- dbConnect(SQLite(),"data/tcmnp.db")
+        # rs <- dbReadTable(con,"formula_herb") %>% lapply(as.factor) %>% as.data.frame
+        rs <- dbGetQuery(con,
+                         paste0(
+                           'SELECT * FROM formula_herb WHERE "方剂名称" LIKE "%',
+                           input$queryTxt,
+                           '%" OR "方剂名称拼音" LIKE "%',
+                           input$queryTxt,
+                           '%" OR "中药名称" LIKE "%',
+                           input$queryTxt,
+                           '%" OR "中药名称拼音" LIKE "%',
+                           input$queryTxt,
+                           '%"'
+                         )) %>% lapply(as.factor) %>% as.data.frame
+
+        dbDisconnect(con)
+
+        output$formula_herb_db <- renderDT(rs, escape = FALSE)
+
       })
-      output$out <- renderText({
-        count()
-      })
-      count
+
+
     }
   )
 }

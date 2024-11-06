@@ -15,30 +15,59 @@ homeUI <- function(id) {
 formulaHerbUI <- function(id, tabNameZh) {
   ns <- NS(id)
   tagList(
-    h2(tabNameZh),
     fluidRow(
       box(
         title = paste0(tabNameZh,"管理"),
-        width = 9,
+        width = 12,
         solidHeader = TRUE,
         status = "primary",
 
         tabsetPanel(
+          ## 中药数据库 ----
           tabPanel(
-            title = "查询",
-            actionButton(ns("query"),"查询"),
-            verbatimTextOutput(ns("out"))
+            title = "中药数据库",
+            DTOutput(ns("tcm_db"))
           ),
+
+          ## 中药方剂 ----
           tabPanel(
-            title = "新增",
-            actionButton(ns("add"),"新增"),
-            verbatimTextOutput(ns("out2"))
-          ),
-          tabPanel(
-            title = "删除",
-            actionButton(ns("add"),"新增"),
-            verbatimTextOutput(ns("out2"))
-          ),
+            title = "中药方剂",
+            box(
+              title = "查询/修改/删除",
+              width = 12,
+              solidHeader = TRUE,
+              status = "warning",
+              collapsible = TRUE,
+
+              column(
+                width = 10,
+                textInput(
+                  ns("queryTxt"),
+                  "输入查询字段",
+                  value = "",
+                  placeholder = "真武汤 或 Zhen Wu Tang，附子 或 Fu Zi"),
+              ),
+
+              column(
+                width = 2,
+                tags$br(),
+                actionButton(ns("query"),"查询")
+              ),
+              DTOutput(ns("formula_herb_db"))
+            ),
+
+            box(
+              title = "添加方剂成分",
+              width = 12,
+              solidHeader = TRUE,
+              status = "warning",
+              collapsible = TRUE,
+
+              uiOutput(ns("addUI")),
+              actionButton(ns("add"),"添加"),
+              DTOutput(ns("formula_herb_db2"))
+            )
+          )
         )
       )
     )
