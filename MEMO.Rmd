@@ -16,20 +16,58 @@ output:
 ```{r, eval=FALSE}
 library(shiny)
 library(shinydashboard)
-
-
+library(DBI)
+library(RSQL)
+library(tidyverse)
+library(readxl)
+library(writexl)
+library(httr)
+library(rvest)
+library(stringr)
+library(jsonlite)
+library(dplyr)
 
 ```
 
 
+## 数据库操作
+
 ```{r, eval=FALSE}
+con <- dbConnect(SQLite(), "data/tcmnp.db")
+dbDisconnect(con)
 
 ```
 
 
-
-
+## 网页抓取
 ```{r, eval=FALSE}
+# tcmsp
+url <- "https://old.tcmsp-e.com/tcmspsearch.php?qr=Aconiti%20Lateralis%20Radix%20Praeparata&qsr=herb_en_name&token=62bfada3d007982faa0f349d028461c0"
+
+ingredients_numeric_vars <- c("ob","mw","alogp","caco2","bbb","halflife","hdon","hacc","dl","FASA")
+targets_numeric_vars <- c("SVM_score","RF_score")
+
+
+res <- httr::GET(url, enconding="UTF-8", config(ssl_verifypeer=FALSE)) %>% 
+  rvest::read_html() %>% 
+  rvest::html_elements("script") %>% 
+  rvest::html_text() %>% 
+  stringr::str_extract_all(.,"data:\\s\\[.*\\]")
+res2 <- unlist(res[12])
+ingredients <- stringr::str_replace(res2[1],"data:","") %>% writeLines(.,"tmp.txt")
+ingredients_df <- jsonlite::read_json("tmp.txt",simplifyVector = TRUE) 
+ingredients_df <- ingredients_df %>%
+                  mutate(herb = rep("附子",nrow(ingredients_df))) %>%
+                  mutate(herb_pinyin = rep("Fu Zi",nrow(ingredients_df))) %>%
+                  mutate(herb_latin = rep("Aconiti Lateralis Radix Praeparata",nrow(ingredients_df))) %>%
+                  dplyr::select(herb,herb_pinyin,herb_latin,everything())  %>%
+                  as.numingredients_numeric_vars
+
+ingredients_targets <- stringr::str_replace(res2[2],"data:","") %>% writeLines(.,"tmp.txt")
+ingredients_targets_df <- jsonlite::read_json("tmp.txt",simplifyVector = TRUE)
+ingredients_targets_df <- ingredients_targets_df %>% as.factor()
+
+file.remove(tmp.txt)
 
 ```
 
