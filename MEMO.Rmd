@@ -17,7 +17,8 @@ output:
 library(shiny)
 library(shinydashboard)
 library(DBI)
-library(RSQLite)
+# library(RSQLite)
+library(RMySQL)
 library(tidyverse)
 library(readxl)
 library(writexl)
@@ -34,6 +35,22 @@ library(dplyr)
 
 ```{r, eval=FALSE}
 con <- dbConnect(SQLite(), "data/tcmnp.db")
+dbDisconnect(con)
+
+```
+
+## 数据库用RMySQL https://www.cnblogs.com/nxld/p/6092278.html
+
+```{r, eval=FALSE}
+library(RMySql)
+
+con <- dbConnect(MySQL(),host="localhost",dbname="data/tcmnp.db",user="root",password="root")
+
+#获取连接信息，查看database下所有表
+summary(con)  
+dbGetInfo(con)  
+dbListTables(con)
+
 dbDisconnect(con)
 
 ```
@@ -80,9 +97,11 @@ file.remove("tmp.txt")
 ## 读入excel数据，表格显示
 ```{r, eval=FALSE}
 db <- reactive({
-        rs <- readxl::read_xlsx("data/中药数据库.xlsx") %>% lapply(as.factor) %>% as.data.frame
-        rs$数据库 <- paste0('<a href="',rs$网址,'" target="_blank">', rs$数据库, '</a>') %>% as.data.frame
-        colnames(rs[,1]) <- "数据库"
+        # rs <- readxl::read_xlsx("data/中药数据库.xlsx") %>% lapply(as.factor) %>% as.data.frame
+        rs <- readxl::read_xlsx("data/中药数据库.xlsx")
+        rs[,2] <- paste0('<a href="',rs$网址,'" target="_blank">', rs$数据库, '</a>') %>% as.data.frame
+        # unite(rs, "数据库", 数据库, 网址)
+        # colnames(rs[,1]) <- "数据库"
         rs <- rs[-ncol(rs)]
         rs
       })
@@ -100,7 +119,7 @@ con <- dbConnect(SQLite(),"data/tcmnp.db")
 dbWriteTable(con,"tcmdb",rs)
 
 dbWriteTable(con,"formula_herb",rs)
-rs <- dbReadTable(con,"formula_herb") %>% lapply(as.factor) %>% as.data.frame
+# rs <- dbReadTable(con,"formula_herb") %>% lapply(as.factor) %>% as.data.frame
 
 rs <- dbGetQuery(con, 
                  paste0(
@@ -128,7 +147,6 @@ rs <- dbGetQuery(con,
                   '%"'
                 ))
 
-
 dbListTables(con)
 
 dbDisconnect(con)
@@ -143,21 +161,178 @@ output$formula_herb_db <- renderDT(rs, escape = FALSE)
 # 增加记录
 con <- dbConnect(SQLite(),"data/tcmnp.db")
 
+if (length(trimws(input$new_tcmdb_link)) >0) {
+          name <- paste0('<a herf="',trimws(input$new_tcmdb_link),'" target="_blank">',
+                         trimws(input$new_tcmdb_name),'</a>')
+        }
+        else {
+          name <- input$new_tcmdb_name
+        }
+
+        if (length(trimws(input$new_tcmdb_doi)) >0) {
+          doi <- paste0('<a herf="','https:/doi.org/',trimws(input$new_tcmdb_doi),'" target="_blank">',
+                        trimws(input$new_tcmdb_doi),'</a>')
+        }
+        else {
+          doi <- ""
+        }
+
+        rs <- c(name,
+                trimws(input$new_tcmdb_en),
+                trimws(input$new_tcmdb_zh),
+                trimws(input$new_tcmdb_year),
+                trimws(input$new_tcmdb_version),
+                doi,
+                trimws(input$new_tcmdb_status)
+                ) %>% paste0("'", .,sep="'",collapse = ",")
+
+        putEntry("data/tcmnp.db","tcmdb",rs)
+
+putEntry <- function(db,table,query) {
+  con <- dbConnect(SQLite(),db)
+  # query <- paste0("'",list,sep="'",collapse = ",")
+  dbSendQuery(con, paste0("INSERT INTO ",table," VALUES (",query,")"))
+  dbDisconnect(con)
+}
+
 dbListTables(con)
+dbListFields(con,"tcmdb")
+
+# 删除记录
+ box(
+              width = 6,
+              title = "选择的中药数据库信息",
+              status = "warning",
+              solidHeader = TRUE,
+
+              p("选择的行号是: ",textOutput(ns("txt"))),
 
 
+              column(width = 2, actionButton(ns("update_tcmdb"),"更新")),
+              column(width = 2, actionButton(ns("delete_tcmdb"),"删除"))
+            ),
 
-dbSendQuery(con,
-            "INSERT INTO tcmdb
-            VALUES(rs2)")
+            box(
+              width = 6,
+              title = "中药数据库信息",
+              column(width = 3, textInput(ns("new_tcmdb_name"),"英文缩写")),
+              column(width = 3, textInput(ns("new_tcmdb_link"),"链接网址")),
+              column(width = 3, textInput(ns("new_tcmdb_en"),"英文全称")),
+              column(width = 3, textInput(ns("new_tcmdb_zh"),"中文全称")),
+              column(width = 3, textInput(ns("new_tcmdb_year"),"建立年份")),
+              column(width = 3, textInput(ns("new_tcmdb_doi"),"文章DOI")),
+              column(width = 3, selectInput(ns("new_tcmdb_status"),"链接状态",choices = c("可用"="可用","失效"="失效"))),
+              column(width = 3, actionButton(ns("new_tcmdb_addbtn"),"新增"),
+            ),
 
-dbDisconnect(con)
+
+# 更新记录
 
 
 ```
 
+## 增删改查参考
 
 ```{r, eval=FALSE}
+
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(tidyverse)
+
+Input <- structure(
+  list(
+    `Security Type` = c("Stock", "Stock", "Load Fund"),
+    Ticker = c("XOM", "NFLX", "AMCPX"),
+    `Purchase Date` = structure(c(16070, 17084, 17084), class = "Date"),
+    `Sale Date` = structure(c(18627, NA, 18545), class = "Date"),
+    `Amount Invested` = c("$10,000", "$8,000", "$10,000")
+  ),
+  class = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"),
+  row.names = c(NA, -3L)
+)
+
+
+shinyApp(
+  ui = tags$body(
+    class = "skin-blue sidebar-mini control-sidebar-open",
+    dashboardPage(
+      header = dashboardHeader(title = "Investment Advisor Monitoring - Insider Trading"),
+      sidebar = dashboardSidebar(
+        minified = F,
+        collapsed = F,
+        
+        selectInput("sectype", "Security Type", c(unique(
+          Input$`Security Type`
+        ))),
+        selectInput("sectick", "Ticker", c(unique(Input$Ticker))),
+        dateInput("PurDate", "Purchase Date", value = as.Date("2013-12-31")),
+        dateInput("selDate", "Sale Date", value = as.Date("2019-01-31")),
+        selectInput("aminv", "Amount Invested", c(unique(
+          Input$`Amount Invested`
+        ))),
+        actionButton("add", "Add"),
+        actionButton("edit", "Edit"),
+        
+        actionButton("deleteRows", "Delete Rows")
+        
+      ),
+      body = dashboardBody(h3("Results"), tabsetPanel(
+        id = "tabs", tabPanel("InsiderTraining", dataTableOutput("TBL1"))
+      )),
+      
+      title = "DashboardPage"
+    )
+  ),
+  ###### SERVER
+  server = function(input, output) {
+    # Init with some example data
+    #data <- reactiveVal(Input)
+    rv <- reactiveValues(df = Input, row_selected = NULL)
+    
+    observeEvent(input$add, {
+      # start with current data
+      rv$df <- rv$df %>%
+        add_row(
+          `Security Type` = isolate(input$sectype),
+          Ticker = isolate(input$sectick),
+          `Purchase Date` = isolate(input$PurDate),
+          `Sale Date` = isolate(input$selDate),
+          `Amount Invested` = isolate(input$aminv)
+        )#  %>%
+      # update data value
+      #data()
+      
+      
+    })
+    observeEvent(input$deleteRows, {
+      if (!is.null(input$TBL1_rows_selected)) {
+        #data(data()[-as.numeric(input$TBL1_rows_selected),])
+        rv$df <- rv$df[-as.numeric(input$TBL1_rows_selected), ]
+      }
+    })
+    
+    observeEvent(input$edit, {
+      if (!is.null(input$TBL1_rows_selected)) {
+        cols_to_edit <- c('sectype', 'sectick', 'PurDate', 'selDate', 'aminv')
+        colnms <- c('Security Type',
+                    'Ticker',
+                    'Purchase Date',
+                    'Sale Date',
+                    'Amount Invested')
+        "remember the row selected"
+        rv$row_selected <- input$TBL1_rows_selected
+        
+        walk2(cols_to_edit, colnms, ~ {
+          rv$df[input$TBL1_rows_selected, ..2] <<- input[[..1]]
+        })
+        
+      }
+      
+    })
+    output$TBL1 <- renderDataTable(rv$df, selection = "single")
+  }
+)
 
 ```
 

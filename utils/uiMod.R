@@ -27,22 +27,27 @@ dbmanaUI <- function(id, tabNameZh) {
           ## 中药数据库 ----
           tabPanel(
             title = "中药数据库管理",
-            column(width = 1, textInput(ns("new_tcmdb_name"),"数据库英文缩写")),
-            column(width = 1, textInput(ns("new_tcmdb_link"),"数据库链接网址")),
-            column(width = 3, textInput(ns("new_tcmdb_en"),"数据库英文全称")),
-            column(width = 2, textInput(ns("new_tcmdb_zh"),"数据库中文全称")),
-            column(width = 1, textInput(ns("new_tcmdb_year"),"数据库建立年份")),
-            column(width = 1, textInput(ns("new_tcmdb_version"),"数据库版本")),
-            column(width = 2, textInput(ns("new_tcmdb_doi"),"数据库文章DOI")),
-            column(width = 1, selectInput(ns("new_tcmdb_status"),"数据库链接状态",choices = c("可用"="可用","失效"="失效"))),
-            # column(width = 1, actionButton(ns("new_tcmdb_cleanbtn"),"清除"),actionButton(ns("new_tcmdb_addbtn"),"确认添加")),
-            column(width = 1, tags$hr(), actionButton(ns("new_tcmdb_addbtn"),"确认添加")),
+            box(
+              width = 12,
+              title = "中药数据库信息",
+              status = "primary",
+              solidHeader = TRUE,
 
-            DTOutput(ns("tcm_db")),
+              column(width = 1, textInput(ns("tcmdb_id"),"数据库ID")),
+              column(width = 3, textInput(ns("tcmdb_name"),"英文缩写及链接")),
+              column(width = 2, textInput(ns("tcmdb_en"),"英文全称")),
+              column(width = 2, textInput(ns("tcmdb_zh"),"中文全称")),
+              column(width = 1, textInput(ns("tcmdb_year"),"建立年份")),
+              column(width = 2, textInput(ns("tcmdb_doi"),"文章DOI")),
+              column(width = 1, selectInput(ns("tcmdb_status"),"链接状态",choices = c("可用"="可用","失效"="失效"))),
 
-            actionButton(ns("update_tcmdb"),"更新"),
-            actionButton(ns("delete_tcmdb"),"删除"),
-            textOutput(ns("txt"))
+              column(width = 1, actionButton(ns("tcmdb_update_btn"),"更新")),
+              column(width = 1, actionButton(ns("tcmdb_delete_btn"),"删除")),
+              column(width = 1, actionButton(ns("tcmdb_add_btn"),"新增")),
+              column(width = 9,
+                     p('超链接编辑方法: <a href="https://old.tcmsp-e.com/tcmsp.php" target="_blank">TCMSP</a>'))
+            ),
+            DTOutput(ns("tcm_db"))
           ),
 
           ## 中药方剂库 ----
@@ -54,6 +59,7 @@ dbmanaUI <- function(id, tabNameZh) {
               tabPanel(ns("更新/删除"), "tab2 content")
             )
           )
+
         )
       )
     )
