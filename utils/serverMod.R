@@ -9,25 +9,78 @@ library(writexl)
 library(tidyverse)
 library(ggpubr)
 
-# 中药方剂 ----
-formulaHerbServer <- function(id) {
+ftc <- source("utils/fct.R")
+
+
+# 数据管理 ----
+dbmanaServer <- function(id) {
   moduleServer(
     id,
     function(input, output, session) {
-      # 中药库
-      tcmdb <- reactive({
-        # rs <- readxl::read_xlsx("data/中药数据库.xlsx") %>% lapply(as.factor) %>% as.data.frame
-        # rs$数据库 <- paste0('<a href="',rs$网址,'" target="_blank">', rs$数据库, '</a>') %>% as.data.frame
-        # colnames(rs[,1]) <- "数据库"
-        # rs <- rs[-ncol(rs)]
-        # rs
-        con <- dbConnect(SQLite(),"data/tcmnp.db")
-        rs <- dbReadTable(con,"tcmdb") %>% lapply(as.factor) %>% as.data.frame
-        dbDisconnect(con)
-        rs
-      })
-      output$tcm_db <- renderDT(tcmdb(), escape = FALSE)
+      # 中药数据库管理 ----
+      ## 表格 ----
+      tcmdb <- reactive({getAllData("data/tcmnp.db","tcmdb")})
+      output$tcm_db <- renderDT(tcmdb(), escape = FALSE,edit=TRUE)
 
+      ## 新增按钮 ----
+      observeEvent(input$new_tcmdb_addbtn, {
+        req(input$new_tcmdb_name)
+        if (length(trimws(input$new_tcmdb_link)) >0) {
+          name <- paste0('<a herf="',trimws(input$new_tcmdb_link),'" target="_blank">',
+                         trimws(input$new_tcmdb_name),'</a>')
+        }
+        else {
+          name <- input$new_tcmdb_name
+        }
+
+        if (length(trimws(input$new_tcmdb_doi)) >0) {
+          doi <- paste0('<a herf="','https:/doi.org/',trimws(input$new_tcmdb_doi),'" target="_blank">',
+                        trimws(input$new_tcmdb_doi),'</a>')
+        }
+        else {
+          doi <- ""
+        }
+
+
+        rs <- c(name,
+                trimws(input$new_tcmdb_en),
+                trimws(input$new_tcmdb_zh),
+                trimws(input$new_tcmdb_year),
+                trimws(input$new_tcmdb_version),
+                doi,
+                trimws(input$new_tcmdb_status)
+                ) %>% paste0("'", .,sep="'",collapse = ",")
+
+        putEntry("data/tcmnp.db","tcmdb",rs)
+
+      })
+
+      ## 清除按钮 -----
+      # observeEvent(input$new_tcmdb_cleanbtn, {
+      #   input$new_tcmdb_name = ""
+      #   input$new_tcmdb_en = ""
+      #   input$new_tcmdb_zh = ""
+      #   input$new_tcmdb_year = ""
+      #   input$new_tcmdb_version = ""
+      #   input$new_tcmdb_doi = ""
+      # })
+
+      ## 更新 ----
+
+      ## 删除 ----
+
+
+
+
+    }
+  )
+}
+
+# 数据查询 ----
+dbqueryServer <- function(id) {
+  moduleServer(
+    id,
+    function(input, output, session) {
       # 查询方剂库
       observeEvent(input$query, {
         req(input$queryTxt)
@@ -51,167 +104,12 @@ formulaHerbServer <- function(id) {
         output$formula_herb_db <- renderDT(rs, escape = FALSE)
 
       })
-
-
     }
   )
 }
 
-# 中药成分 ----
-herbIngredientsServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 2)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 成分靶点 ----
-ingredientsTagetsServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 疾病靶点 ----
-diseaseTagetsServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 靶点通路 ----
-tagetsPathwayServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 研究文献 ----
-refsServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 靶点交集 ----
-commonTargetsServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 网络药理 ----
-networkServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# 蛋白互作 ----
-ppiServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# GO分析 ----
-goServer <- function(id) { # 中药方剂
-  moduleServer(
-    id,
-    function(input, output, session) {
-      count <- reactiveVal(0)
-      observeEvent(input$button, {
-        count(count() + 1)
-      })
-      output$out <- renderText({
-        count()
-      })
-      count
-    }
-  )
-}
-
-# KEGG分析 ----
-keggServer <- function(id) { # 中药方剂
+# 调控网络 ----
+networkServer <- function(id) {
   moduleServer(
     id,
     function(input, output, session) {

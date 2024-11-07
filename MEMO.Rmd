@@ -140,6 +140,19 @@ output$formula_herb_db <- renderDT(rs, escape = FALSE)
 
 # 数据库增删改
 ```{r, eval=FALSE}
+# 增加记录
+con <- dbConnect(SQLite(),"data/tcmnp.db")
+
+dbListTables(con)
+
+
+
+dbSendQuery(con,
+            "INSERT INTO tcmdb
+            VALUES(rs2)")
+
+dbDisconnect(con)
+
 
 ```
 
