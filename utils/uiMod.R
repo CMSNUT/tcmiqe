@@ -53,6 +53,24 @@ dbmanaUI <- function(id, tabNameZh) {
           ## 中药方剂库 ----
           tabPanel(
             title = "中药方剂管理",
+            box(
+              width = 12,
+              solidHeader = TRUE,
+              status = 'primary',
+              title = "可查询方剂-中药的数据库",
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,),
+              column(width = 1,)
+            ),
             tabBox(
               id="tabs2",
               tabPanel(ns("新增"), "First tab content"),
