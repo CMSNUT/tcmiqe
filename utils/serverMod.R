@@ -11,6 +11,22 @@ library(ggpubr)
 
 ftc <- source("utils/fct.R")
 
+homeServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    output$home001 <- renderImage({
+      filename <- normalizePath(file.path('images/home001.jpg'))
+      list(src = filename,width = 600,height = 400)
+    },
+    deleteFile = FALSE)
+
+    output$home002 <- renderImage({
+      filename <- normalizePath(file.path('images/home002.jpg'))
+      list(src = filename,width = 800,height = 400)
+    },
+    deleteFile = FALSE)
+  })
+}
+
 
 # 数据管理 ----
 dbmanaServer <- function(id) {
@@ -116,36 +132,36 @@ dbmanaServer <- function(id) {
   })
 }
 
-# 数据查询 ----
-dbqueryServer <- function(id) {
-  moduleServer(id, function(input, output, session) {
-    # 查询方剂库
-    observeEvent(input$query, {
-      req(input$queryTxt)
-      con <- dbConnect(SQLite(), "data/tcmnp.db")
-      # rs <- dbReadTable(con,"formula_herb") %>% lapply(as.factor) %>% as.data.frame
-      rs <- dbGetQuery(
-        con,
-        paste0(
-          'SELECT * FROM formula_herb WHERE "方剂名称" LIKE "%',
-          input$queryTxt,
-          '%" OR "方剂名称拼音" LIKE "%',
-          input$queryTxt,
-          '%" OR "中药名称" LIKE "%',
-          input$queryTxt,
-          '%" OR "中药名称拼音" LIKE "%',
-          input$queryTxt,
-          '%"'
-        )
-      ) %>% lapply(as.factor) %>% as.data.frame
-
-      dbDisconnect(con)
-
-      output$formula_herb_db <- renderDT(rs, escape = FALSE)
-
-    })
-  })
-}
+# # 数据查询 ----
+# dbqueryServer <- function(id) {
+#   moduleServer(id, function(input, output, session) {
+#     # 查询方剂库
+#     observeEvent(input$query, {
+#       req(input$queryTxt)
+#       con <- dbConnect(SQLite(), "data/tcmnp.db")
+#       # rs <- dbReadTable(con,"formula_herb") %>% lapply(as.factor) %>% as.data.frame
+#       rs <- dbGetQuery(
+#         con,
+#         paste0(
+#           'SELECT * FROM formula_herb WHERE "方剂名称" LIKE "%',
+#           input$queryTxt,
+#           '%" OR "方剂名称拼音" LIKE "%',
+#           input$queryTxt,
+#           '%" OR "中药名称" LIKE "%',
+#           input$queryTxt,
+#           '%" OR "中药名称拼音" LIKE "%',
+#           input$queryTxt,
+#           '%"'
+#         )
+#       ) %>% lapply(as.factor) %>% as.data.frame
+#
+#       dbDisconnect(con)
+#
+#       output$formula_herb_db <- renderDT(rs, escape = FALSE)
+#
+#     })
+#   })
+# }
 
 # 调控网络 ----
 networkServer <- function(id) {
