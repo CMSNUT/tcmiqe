@@ -3,12 +3,12 @@
 #
 golem::fill_desc(
   pkg_name = "tcmiqe",
-  pkg_title = "PKG_TITLE",
-  pkg_description = "PKG_DESC.",
+  pkg_title = "中药智鉴(TCM-IQE)",
+  pkg_description = "A Toolkit for TCM.",
   authors = person(
-    given = "AUTHOR_FIRST",
-    family = "AUTHOR_LAST",
-    email = "AUTHOR@MAIL.COM",
+    given = "Donghui",
+    family = "Xia",
+    email = "dhxia@snut.edu.cn",
     role = c("aut", "cre")
   ),
   repo_url = NULL,
@@ -16,10 +16,10 @@ golem::fill_desc(
   set_options = TRUE
 )
 golem::install_dev_deps()
-usethis::use_mit_license("Golem User")
+usethis::use_mit_license("Donhui Xia (Shaanxi University of Technology, China)")
 golem::use_readme_rmd(open = FALSE)
 devtools::build_readme()
-usethis::use_code_of_conduct(contact = "Golem User")
+usethis::use_code_of_conduct(contact = "dhxia@snut.edu.cn")
 usethis::use_lifecycle_badge("Experimental")
 usethis::use_news_md(open = FALSE)
 golem::use_recommended_tests()
@@ -29,6 +29,7 @@ golem::use_utils_server(with_test = TRUE)
 usethis::use_git()
 usethis::use_git_remote(
   name = "origin",
-  url = "https://github.com/CMSNUT/tcmiqe.git"
+  url = "https://github.com/CMSNUT/tcmiqe.git",
+  overwrite = TRUE
 )
 rstudioapi::navigateToFile("dev/02_dev.R")
