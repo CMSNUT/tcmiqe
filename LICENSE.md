@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2024 Donhui Xia (Shaanxi University of Technology, China)
+Copyright (c) 2024 Donghui Xia
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
