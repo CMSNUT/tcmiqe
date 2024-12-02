@@ -1,0 +1,19 @@
+Package: tcmiqe
+Title: 中药智鉴(TCM-IQE)
+Version: 1.0
+Authors@R: 
+    person("Donghui", "Xia", , "dhxia@snut.edu.cn", role = c("aut", "cre"))
+Description: A toolkit for TCM.
+License: MIT + file LICENSE
+Imports: 
+    config,
+    golem,
+    shiny
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Language: en-US
