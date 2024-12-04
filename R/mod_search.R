@@ -67,9 +67,11 @@ mod_search_server <- function(id) {
     observeEvent(input$tabs, {
       if (input$tabs == ns("online")) {
         # print("online")
+        df <- get("online") %>% as.data.frame,
+        df[,2] <- editLink(df[,2])
+        df[,]
         output$onlineTable <- renderDT(
-          # online %>% lapply(.,factor) %>% as.data.frame,
-          online,
+          df,
           escape = FALSE,
           # filter = 'top',
           options = list(
@@ -141,14 +143,11 @@ mod_search_server <- function(id) {
       }
     })
 
-    myFilter <- function(data,) {
-
-    }
 
     observeEvent(input$searchBtn,{
       req(input$queryWord)
       output$localTable <- renderDT(
-          get(input$dbSelected) %>% myFilter(),
+          get(input$dbSelected),
           escape = FALSE,
           # filter = 'top',
           options = list(
@@ -163,7 +162,6 @@ mod_search_server <- function(id) {
             )
           )
         )
-
     })
 
   })
