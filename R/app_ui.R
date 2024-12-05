@@ -28,26 +28,12 @@ app_ui <- function(request) {
         mod_home_ui("home")
       ),
 
-      # 网络药理 ----
-      navbarMenu(
+      ## 网络药理 ----
+      tabPanel(
         title = "网络药理",
+        value = "netpharm",
         icon = icon("home"),
-
-        ## 数据查询 ----
-        tabPanel(
-          title = "数据查询",
-          value = "search",
-          icon = icon("home"),
-          mod_search_ui("search")
-        ),
-
-        ## 调控网络 ----
-        tabPanel(
-          title = "调控网络",
-          value = "netpharm",
-          icon = icon("home"),
-          mod_netpharm_ui("netpharm")
-        )
+        mod_netpharm_ui("netpharm")
       ),
 
       # 生信分析 ----
