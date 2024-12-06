@@ -16,10 +16,10 @@ golem::fill_desc(
   set_options = TRUE
 )
 golem::install_dev_deps()
-usethis::use_mit_license("Golem User")
+usethis::use_mit_license("Donghui Xia")
 golem::use_readme_rmd(open = FALSE)
 devtools::build_readme()
-usethis::use_code_of_conduct(contact = "Golem User")
+usethis::use_code_of_conduct(contact = "dhxia@snut.edu.cn")
 usethis::use_lifecycle_badge("Experimental")
 usethis::use_news_md(open = FALSE)
 golem::use_recommended_tests()
@@ -29,6 +29,6 @@ golem::use_utils_server(with_test = TRUE)
 usethis::use_git()
 usethis::use_git_remote(
   name = "origin",
-  url = "https://github.com/<OWNER>/<REPO>.git"
+  url = "https://github.com/CMSNUT/tcmiqe.git"
 )
 rstudioapi::navigateToFile("dev/02_dev.R")
