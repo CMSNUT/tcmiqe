@@ -13,7 +13,7 @@ app_ui <- function(request) {
     # fluidPage(
     #   golem::golem_welcome_page()
     # )
-    tags$style(type="text/css", "body {padding-top: 50px;}"),
+    tags$style(type="text/css", "body {padding-top: 60px;}"),
     navbarPage(
       title = a("中药智鉴(TCM-IQE)",herf="https://github.com/CMSNUT/tcmiqe.git", target="_blank"),
       theme = "mytheme.css",
