@@ -1,26 +1,17 @@
 Package: tcmiqe
-Title: 中药智鉴(TCM-IQE)
-Version: 1.0
+Title: An Amazing Shiny App
+Version: 0.0.0.9000
 Authors@R: 
-    person("Donghui", "Xia", , "dhxia@snut.edu.cn", role = c("aut", "cre"))
-Description: A toolkit for TCM.
-License: MIT + file LICENSE
+    person(given = "firstname",
+           family = "lastname",
+           role = c("aut", "cre"),
+           email = "your@email.com")
+Description: What the package does (one paragraph).
+License: What license is it under?
 Imports: 
     config,
     golem,
-    shiny,
-    shinyjs
-Suggests: 
-    knitr,
-    rmarkdown,
-    spelling,
-    testthat (>= 3.0.0)
-VignetteBuilder: 
-    knitr
-Config/testthat/edition: 3
+    shiny
 Encoding: UTF-8
-Language: en-US
 LazyData: true
-RoxygenNote: 7.3.2
-Depends: 
-    R (>= 3.5)
+RoxygenNote: 7.1.1

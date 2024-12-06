@@ -2,7 +2,6 @@
 #
 #
 attachment::att_amend_desc()
-
 golem::add_module(name = "name_of_module1", with_test = TRUE)
 golem::add_module(name = "name_of_module2", with_test = TRUE)
 golem::add_fct("helpers", with_test = TRUE)
@@ -13,7 +12,6 @@ golem::add_css_file("custom")
 golem::add_sass_file("custom")
 golem::add_any_file("file.json")
 usethis::use_data_raw(name = "my_dataset", open = FALSE)
-
 usethis::use_test("app")
 usethis::use_vignette("tcmiqe")
 devtools::build_vignettes()
