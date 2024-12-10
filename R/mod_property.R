@@ -1,4 +1,4 @@
-#' bioinfoData UI Function
+#' property UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,17 +7,17 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_bioinfoData_ui <- function(id) {
+mod_property_ui <- function(id) {
   ns <- NS(id)
   tagList(
  
   )
 }
     
-#' bioinfoData Server Functions
+#' property Server Functions
 #'
 #' @noRd 
-mod_bioinfoData_server <- function(id){
+mod_property_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
  
@@ -25,7 +25,7 @@ mod_bioinfoData_server <- function(id){
 }
     
 ## To be copied in the UI
-# mod_bioinfoData_ui("bioinfoData_1")
+# mod_property_ui("property_1")
     
 ## To be copied in the server
-# mod_bioinfoData_server("bioinfoData_1")
+# mod_property_server("property_1")

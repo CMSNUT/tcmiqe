@@ -19,63 +19,36 @@ app_ui <- function(request) {
 
     dashboardPage(
       # 标题 header ----
-      dashboardHeader(
-        title=tags$b("中药智鉴(TCM-IQE)")
-      ),
+      dashboardHeader(title = tags$b("中药智鉴(TCM-IQE)")),
 
       # 侧边栏 sidebar ----
       dashboardSidebar(
         sidebarMenu(
-          id="tabs",
+          id = "tabs",
 
           ## 主页 ----
-          menuItem(
-            "主页",
-            tabName = "home",
-            icon = icon("home")
-          ),
+          menuItem("主页", icon = icon("home"), tabName = "home"),
 
-          ## 网络药理学 ----
-          menuItem(
-            "网络药理学",
-            icon = icon("th"),
+          ## 中药药理分析 ----
+          menuItem("中药药理分析", icon = icon("th"), tabName = "pharm"),
 
-            menuSubItem("重要研究工具",tabName = "tool"),
-            menuSubItem("网络药理分析",tabName = "netpharm")
-          ),
+          ## 中药复方优化 ----
+          menuItem("中药复方优化", icon = icon("th"), tabName = "fmopt"),
 
-          ## 生物信息学 ----
-          menuItem(
-            "生物信息学",
-            icon = icon("th"),
+          ## 药材品质分析 ----
+          menuItem("药材品质分析", icon = icon("th"), tabName = "quality"),
 
-            menuSubItem("生信数据",tabName = "bioinfoData"),
-            menuSubItem("统计工具",tabName = "statistics"),
-            menuSubItem("生存分析",tabName = "survival"),
-            menuSubItem("Cox回归",tabName = "cox"),
-            menuSubItem("差异表达",tabName = "deg")
-          ),
+          ## 药物性质评估 ----
+          menuItem("药物性质评估", icon = icon("th"), tabName = "property"),
 
-          ## 化学计量学 ----
-          menuItem(
-            "化学计量学",
-            icon = icon("th"),
+          ## 药物优化设计 ----
+          menuItem("药物优化设计", icon = icon("th"), tabName = "cadd"),
 
-            menuSubItem("示例数据",tabName = "sampleData"),
-            menuSubItem("关键算法",tabName = "algorithm"),
-            menuSubItem("模型构建",tabName = "modeling")
-          ),
+          ## 数据库 ----
+          menuItem("数据库", icon = icon("th"), tabName = "database"),
 
-          ## 化学信息学 ----
-          menuItem(
-            "化学信息学",
-            icon = icon("th"),
-
-            menuSubItem("结构转换",tabName = "struct"),
-            menuSubItem("构效关系",tabName = "qsar"),
-            menuSubItem("分子对接",tabName = "docking"),
-            menuSubItem("分子动力学",tabName = "md")
-          )
+          ## 工具箱 ----
+          menuItem("工具箱", icon = icon("th"), tabName = "toolkit")
         )
       ),
 
@@ -86,123 +59,34 @@ app_ui <- function(request) {
 
         tabItems(
           ## 主页 ----
-          tabItem(
-            "home",
-            div(p("home")),
-            mod_home_ui("home")
-          ),
+          tabItem("home", div(p("home")), mod_home_ui("home")),
 
-          ## 网络药理学 ----
-          ### 重要研究工具 ----
-          tabItem(
-            "tool",
-            div(p("tool")),
-            mod_tool_ui("tool")
-          ),
+          ## 中药药理分析 ----
+          tabItem("pharm", div(p("pharm")), mod_home_ui("pharm")),
 
-          ### 网络药理分析 ----
-          tabItem(
-            "netpharm",
-            div(p("netpharm")),
-            mod_netpharm_ui("netpharm")
-          ),
+          ## 中药复方优化 ----
+          tabItem("fmopt", div(p("fmopt")), mod_home_ui("fmopt")),
 
+          ## 药材品质分析 ----
+          tabItem("quality", div(p("quality")), mod_home_ui("quality")),
 
-          ## 生物信息学 ----
-          ### 生信数据 ----
-          tabItem(
-            "bioinfoData",
-            div(p("bioinfoData")),
-            mod_bioinfoData_ui("bioinfoData")
-          ),
+          ## 药物性质评估 ----
+          tabItem("property", div(p("property")), mod_home_ui("property")),
 
-          ### 统计工具 ----
-          tabItem(
-            "statistics",
-            div(p("statistics")),
-            mod_statistics_ui("statistics")
-          ),
+          ## 药物优化设计 ----
+          tabItem("cadd", div(p("cadd")), mod_home_ui("cadd")),
 
-          ### 生存分析 ----
-          tabItem(
-            "survival",
-            div(p("survival")),
-            mod_survival_ui("survival")
-          ),
+          ## 数据库 ----
+          tabItem("database", div(p("database")), mod_home_ui("database")),
 
-          ### Cox回归 ----
-          tabItem(
-            "cox",
-            div(p("cox")),
-            mod_cox_ui("cox")
-          ),
-
-          ### 差异表达 ----
-          tabItem(
-            "deg",
-            div(p("deg")),
-            mod_deg_ui("deg")
-          ),
-
-
-          ## 化学计量学 ----
-
-          ### 示例数据 ----
-          tabItem(
-            "sampleData",
-            div(p("sampleData")),
-            mod_sampleData_ui("sampleData")
-          ),
-
-          ### 关键算法 ----
-          tabItem(
-            "algorithm",
-            div(p("algorithm")),
-            mod_algorithm_ui("algorithm")
-          ),
-
-          ### 模型构建 ----
-          tabItem(
-            "modeling",
-            div(p("modeling")),
-            mod_modeling_ui("modeling")
-          ),
-
-          ## 化学信息学 ----
-          ### 结构转换 ----
-          tabItem(
-            "struct",
-            div(p("struct")),
-            mod_struct_ui("struct")
-          ),
-
-          ### 构效关系 ----
-          tabItem(
-            "qsar",
-            div(p("qsar")),
-            mod_qsar_ui("qsar")
-          ),
-
-          ### 分子对接 ----
-          tabItem(
-            "docking",
-            div(p("docking")),
-            mod_docking_ui("docking")
-          ),
-
-          ### 分子动力学 ----
-          tabItem(
-            "md",
-            div(p("md")),
-            mod_md_ui("md")
-          )
-        ),
-
-
+          ## 工具箱 ----
+          tabItem("toolkit", div(p("toolkit")), mod_home_ui("toolkit"))
+        )
       ),
 
-      title = "中药智鉴", # 浏览器页面标题
-      skin ="green"
+      title = "中药智鉴",
+      # 浏览器页面标题
+      skin = "green"
     )
   )
 }
@@ -215,15 +99,7 @@ app_ui <- function(request) {
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {
-  add_resource_path(
-    "www",
-    app_sys("app/www")
-  )
-  tags$head(
-    favicon(),
-    bundle_resources(
-      path = app_sys("app/www"),
-      app_title = "tcmiqe"
-    )
-  )
+  add_resource_path("www", app_sys("app/www"))
+  tags$head(favicon(),
+            bundle_resources(path = app_sys("app/www"), app_title = "tcmiqe"))
 }

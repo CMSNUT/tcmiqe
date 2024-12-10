@@ -1,4 +1,4 @@
-#' survival UI Function
+#' database UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,17 +7,17 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_survival_ui <- function(id) {
+mod_database_ui <- function(id) {
   ns <- NS(id)
   tagList(
  
   )
 }
     
-#' survival Server Functions
+#' database Server Functions
 #'
 #' @noRd 
-mod_survival_server <- function(id){
+mod_database_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
  
@@ -25,7 +25,7 @@ mod_survival_server <- function(id){
 }
     
 ## To be copied in the UI
-# mod_survival_ui("survival_1")
+# mod_database_ui("database_1")
     
 ## To be copied in the server
-# mod_survival_server("survival_1")
+# mod_database_server("database_1")

@@ -1,4 +1,4 @@
-#' struct UI Function
+#' cadd UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,17 +7,17 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_struct_ui <- function(id) {
+mod_cadd_ui <- function(id) {
   ns <- NS(id)
   tagList(
  
   )
 }
     
-#' struct Server Functions
+#' cadd Server Functions
 #'
 #' @noRd 
-mod_struct_server <- function(id){
+mod_cadd_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
  
@@ -25,7 +25,7 @@ mod_struct_server <- function(id){
 }
     
 ## To be copied in the UI
-# mod_struct_ui("struct_1")
+# mod_cadd_ui("cadd_1")
     
 ## To be copied in the server
-# mod_struct_server("struct_1")
+# mod_cadd_server("cadd_1")
